@@ -20,17 +20,30 @@ from data_analysis_utils import load_data
 class MyWidgetApp:
 
     def get_defaults(self):
-        # try to get user-defined defaults from file
+        """
+        Retrieves the default values for the workflow.
+
+        Tries to get user-defined defaults from the "user_def_defaults.json" file.
+        If the file is not found, it falls back to the default values returned by the
+        `return_defaults()` function.
+
+        Returns:
+            dict: A dictionary containing the default values for the workflow.
+        """
         try:
             with open("user_def_defaults.json", "r") as f:
                 user_def_defaults = json.load(f)
         except FileNotFoundError:
-            # get defaults from return_defaults()
             user_def_defaults = return_defaults()
-            #user_def_defaults = user_def_defaults.copy()
-            return user_def_defaults
+        return user_def_defaults
 
     def set_defaults_as_attributes(self, reset=False):
+        """
+        Sets the default attributes based on the user-defined defaults or resets them to the original defaults.
+
+        Args:
+            reset (bool, optional): If True, resets the attributes to the original defaults. Defaults to False.
+        """
         if reset == True:
             defaults = return_defaults()
             with open("user_defined_defaults.json", "w") as f:
@@ -45,6 +58,12 @@ class MyWidgetApp:
         self.user_paths = DefaultObjects(defaults["user_paths"])
 
     def get_defaults_as_dict_from_attributes(self):
+        """
+        Converts the attributes of the object to a dictionary of defaults.
+
+        Returns:
+            dict: A dictionary containing the defaults converted from the object's attributes.
+        """
         defaults = {}
         # do backwards conversion from attributes to dict
         defaults["defaults_raw_data"] = DefaultObjects.convert_back_to_dict(self.defaults_raw_data)
@@ -55,9 +74,36 @@ class MyWidgetApp:
         defaults["user_paths"] = DefaultObjects.convert_back_to_dict(self.user_paths)
         return defaults
 
-
-
     def __init__(self, root):
+        """
+        Initializes the Workflow_widget_alpinac class.
+
+        Parameters:
+        - root: The root window of the application.
+
+        Attributes:
+        - file_var_raw: The raw file path.
+        - data_EI: The EI data.
+        - data_CI: The CI data.
+        - data_EI_reader: The EI data reader.
+        - data_CI_reader: The CI data reader.
+        - ionisation_dict: The dictionary of ionisation data.
+        - path_mass_cal_EI: The EI mass calibration path.
+        - path_mass_cal_CI: The CI mass calibration path.
+        - file_var_mass_cal_file: The mass calibration file.
+        - file_var_mass_cal_mode: The mass calibration mode.
+        - extraction_mode: The extraction mode.
+        - message_raw_data_var: The message variable for raw data.
+        - message_mass_cal_var: The message variable for mass calibration.
+        - message_extract_var: The message variable for extraction.
+        - message_alpinac_var: The message variable for Alpinac.
+        - message_alpinac_input_var: The message variable for Alpinac input.
+        - message_matching_var: The message variable for matching.
+        - root: The root window of the application.
+        - main_frame: The main frame of the application.
+        - rt_plot_frame: The frame for the retention time plot.
+        - mass_plot_frame: The frame for the mass plot.
+        """
 
         #self.user_defined_defaults = {}
         #self.user_defined_paths = {}
@@ -126,6 +172,11 @@ class MyWidgetApp:
     # SETTINGS
 
     def create_settings_menu(self):
+        """
+        Creates the settings menu for the GUI.
+
+        This method creates a menu bar and adds a settings menu to it. The settings menu contains various submenus and commands for different settings options.
+        """
         # Settings menu
         self.menu_bar = tk.Menu(self.root)
         self.root.config(menu=self.menu_bar)
